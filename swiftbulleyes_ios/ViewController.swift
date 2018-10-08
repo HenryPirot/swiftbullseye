@@ -9,11 +9,21 @@
 import UIKit
 
 class ViewController: UIViewController {
+    @IBOutlet var slider: UISlider!
 
+    @IBOutlet var targetLabel: UILabel!
+    @IBOutlet var scoreSumLabel: UILabel!
+
+    @IBOutlet var roundCountLabel: UILabel!
+
+    var currentValue: Int = 0
+    var targetValue :Int = 0 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         view?.backgroundColor = UIColor.white
+        startNewRound()
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,11 +32,41 @@ class ViewController: UIViewController {
     }
 
     @IBAction func clickAction(_ sender: Any) {
-        let alert = UIAlertController(title: "alert", message: "Hello world,my first app", preferredStyle:.alert)
-        let action = UIAlertAction(title: "Awesome", style: .default, handler: nil)
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
+        alertMsg()
+    }
+
+    @IBAction func onSliderMove(_ sender: UISlider) {
+        currentValue = lroundf(sender.value)
+        print("the slider value is \(sender.value)")
     }
     
-}
+    private func generateTargetValue(){
+        targetValue = 1 + Int(arc4random_uniform(100))
+    }
+    
+    func alertMsg() {
+        let msg = "current value is \(currentValue),target value is \(targetValue)"
+        let alert = UIAlertController(title: "hello,world", message: msg, preferredStyle: UIAlertControllerStyle.alert)
+        let action = UIAlertAction(title: "ok", style: .default, handler: nil)
+        alert.addAction(action)
+//        RandomNumberGenerator.next
+        present(alert, animated: true, completion: nil)
+        startNewRound()
+    }
+    
+    private func startNewRound(){
+        generateTargetValue()
+        currentValue = 50
+        slider.value = Float(currentValue)
+    }
 
+    @IBAction func slideMoveFunc(sender: UISlider) {
+    }
+
+    @IBAction func clickStartOver(_ sender: Any) {
+        alertMsg()
+    }
+
+    @IBAction func infoClick(_ sender: Any) {
+    }
+}
