@@ -18,6 +18,7 @@ class ViewController: UIViewController {
 
     var currentValue: Int = 0
     var targetValue :Int = 0 
+    var sumScore = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,16 +43,22 @@ class ViewController: UIViewController {
     
     private func generateTargetValue(){
         targetValue = 1 + Int(arc4random_uniform(100))
+        targetLabel?.text = "\(targetValue)"
     }
     
     func alertMsg() {
-        let msg = "current value is \(currentValue),target value is \(targetValue)"
+        let difference = abs(targetValue - currentValue)
+        let score = 100 - difference
+        sumScore += score
+        let msg = "current value is \(currentValue),\ntarget value is \(targetValue),\ndifference is \(calcDifference())\nyour score is \(score)"
         let alert = UIAlertController(title: "hello,world", message: msg, preferredStyle: UIAlertControllerStyle.alert)
-        let action = UIAlertAction(title: "ok", style: .default, handler: nil)
+        let action = UIAlertAction(title: "ok", style: .default, handler:{
+            (alert:UIAlertAction!) in self.startNewRound()})
         alert.addAction(action)
 //        RandomNumberGenerator.next
         present(alert, animated: true, completion: nil)
-        startNewRound()
+        
+        scoreSumLabel?.text = String(sumScore)
     }
     
     private func startNewRound(){
@@ -59,7 +66,12 @@ class ViewController: UIViewController {
         currentValue = 50
         slider.value = Float(currentValue)
     }
-
+    
+    private func calcDifference() -> Int{
+        let difference = abs(currentValue - targetValue)
+        return difference
+    }
+    
     @IBAction func slideMoveFunc(sender: UISlider) {
     }
 
@@ -70,3 +82,4 @@ class ViewController: UIViewController {
     @IBAction func infoClick(_ sender: Any) {
     }
 }
+
